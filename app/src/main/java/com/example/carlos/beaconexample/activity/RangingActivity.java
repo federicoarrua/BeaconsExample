@@ -1,4 +1,4 @@
-package com.example.carlos.beaconexample;
+package com.example.carlos.beaconexample.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.carlos.beaconexample.R;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -45,7 +47,7 @@ public class RangingActivity extends Activity implements BeaconConsumer {
     @Override
     public void onBeaconServiceConnect() {
         beaconManager.addRangeNotifier(new RangeNotifier() {
-            private String text ="No beacons in this region";
+            private String text;
 
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {

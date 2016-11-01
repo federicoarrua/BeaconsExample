@@ -1,14 +1,14 @@
-package com.example.carlos.beaconexample;
+package com.example.carlos.beaconexample.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
+
+import com.example.carlos.beaconexample.R;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 
@@ -28,20 +28,20 @@ public class BeaconActivity extends Activity {
         TextView text = (TextView) findViewById(R.id.textView2);
 
         try {
-            Beacon beacon = new Beacon.Builder().setId1("f7826da6-4fa2-4e98-8024-bc5b71e0893e")
+            Beacon beacon = new Beacon.Builder().setId1("6fb0e0e9-2ae6-49d3-bba3-3cb7698c77e2")
                     .setId2("1")
                     .setId3("2")
-                    .setManufacturer(0x0118)
+                    .setManufacturer(0x004C)
                     .setTxPower(-59)
                     .setDataFields(Arrays.asList(new Long[] {0l}))
                     .build();
-            BeaconParser bp = new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24");
+            BeaconParser bp = new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24");
             BeaconTransmitter bt = new BeaconTransmitter(getApplicationContext(),bp);
             bt.startAdvertising(beacon);
             text.setText("Beacon mode working");
         }
         catch(Exception e){
-            Log.i(TAG,e.toString());
+            e.printStackTrace();
             text.setText("Beacon mode not working. \r\n Check Bluetooth.");
         }
     }

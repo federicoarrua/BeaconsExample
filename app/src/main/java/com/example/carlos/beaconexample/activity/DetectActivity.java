@@ -1,11 +1,14 @@
-package com.example.carlos.beaconexample;
+package com.example.carlos.beaconexample.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.carlos.beaconexample.R;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -13,6 +16,7 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.Region;
+import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -38,6 +42,7 @@ public class DetectActivity extends Activity implements BeaconConsumer {
             public void didEnterRegion(Region region) {
                 text="You enter in the beacon region";
                 Log.i(TAG,"Entering to a region");
+
                 runOnUiThread(new Runnable() {
                     public void run() {
                         TextView txt = (TextView) findViewById(R.id.textView2);
