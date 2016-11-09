@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.carlos.beaconexample.R;
+import com.example.carlos.beaconexample.simbeacon.TimedBeaconSimulator;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -41,6 +42,7 @@ public class RangingActivity extends Activity implements BeaconConsumer {
 
         this.beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        BeaconManager.setBeaconSimulator(new TimedBeaconSimulator());
         beaconManager.bind(this);
     }
 
@@ -57,7 +59,6 @@ public class RangingActivity extends Activity implements BeaconConsumer {
                     Log.i(TAG,"The Major is: "+beacons.iterator().next().getId2()+"\r\n");
                     Log.i(TAG,"The Minor is: "+beacons.iterator().next().getId3()+"\r\n");
                     text = "UUID:"+beacons.iterator().next().getId1()+"\r\nMajor: "+beacons.iterator().next().getId2()+"\r\n Minor: "+beacons.iterator().next().getId3()+"\r\nDistance: "+beacons.iterator().next().getDistance();
-
                 }
                 else{
                     Log.i(TAG,"No beacons in this region.\r\n");

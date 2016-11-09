@@ -2,8 +2,10 @@ package com.example.carlos.beaconexample.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.widget.TextView;
 
+import com.example.carlos.beaconexample.Constants;
 import com.example.carlos.beaconexample.R;
 
 import org.altbeacon.beacon.Beacon;
@@ -11,6 +13,7 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Created by Carlos on 24/10/2016.
@@ -28,7 +31,7 @@ public class BeaconActivity extends Activity {
         TextView text = (TextView) findViewById(R.id.textView2);
 
         try {
-            Beacon beacon = new Beacon.Builder().setId1("6fb0e0e9-2ae6-49d3-bba3-3cb7698c77e2")
+            Beacon beacon = new Beacon.Builder().setId1(Constants.UUID_DEV)
                     .setId2("1")
                     .setId3("2")
                     .setManufacturer(0x004C)
