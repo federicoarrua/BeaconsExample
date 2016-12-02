@@ -90,8 +90,6 @@ public class DetectActivity extends Activity implements BeaconConsumer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detect_layout);
 
-        BeaconManager.setBeaconSimulator(new TimedBeaconSimulator());
-
         this.beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
         beaconManager.bind(this);

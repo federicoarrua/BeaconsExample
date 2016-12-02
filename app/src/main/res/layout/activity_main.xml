@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -13,7 +13,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:text="Becon Detector Example"
+        android:text="Test APP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
@@ -22,18 +22,17 @@
         android:textAlignment="center" />
 
     <Button
-        android:text="Monitor"
+        android:text="Beacon Monitor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonMonitor"
         android:textAlignment="center" />
 
     <Button
-        android:text="Range"
+        android:text="Beacon Ranging"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonRange"
-        android:layout_weight="1" />
+        android:id="@+id/buttonRange" />
 
     <Button
         android:text="Beacon Mode"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.carlos.beaconexample">
+    package="com.example.carlos.beaconexample"
+    android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
@@ -21,10 +22,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DetectActivity"
-                  android:launchMode="singleInstance">
+            android:launchMode="singleInstance">
 
         </activity>
-        <activity android:name=".activity.RangingActivity">
+        <activity android:name=".activity.RangingActivity"
+            android:launchMode="singleInstance">
 
         </activity>
         <activity android:name=".activity.BeaconActivity">

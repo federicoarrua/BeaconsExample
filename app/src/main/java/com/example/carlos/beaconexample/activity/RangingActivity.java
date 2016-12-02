@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.carlos.beaconexample.R;
@@ -19,6 +20,8 @@ import org.altbeacon.beacon.Region;
 import org.w3c.dom.Text;
 
 import java.util.Collection;
+
+import static org.altbeacon.beacon.BeaconManager.setBeaconSimulator;
 
 /**
  * Created by Carlos on 24/10/2016.
@@ -42,7 +45,6 @@ public class RangingActivity extends Activity implements BeaconConsumer {
 
         this.beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
-        BeaconManager.setBeaconSimulator(new TimedBeaconSimulator());
         beaconManager.bind(this);
     }
 
@@ -58,23 +60,27 @@ public class RangingActivity extends Activity implements BeaconConsumer {
                     Log.i(TAG,"The UUID is: "+beacons.iterator().next().getId1()+"\r\n");
                     Log.i(TAG,"The Major is: "+beacons.iterator().next().getId2()+"\r\n");
                     Log.i(TAG,"The Minor is: "+beacons.iterator().next().getId3()+"\r\n");
-                    text = "UUID:"+beacons.iterator().next().getId1()+"\r\nMajor: "+beacons.iterator().next().getId2()+"\r\n Minor: "+beacons.iterator().next().getId3()+"\r\nDistance: "+beacons.iterator().next().getDistance();
+                    logToDisplay("UUID:"+beacons.iterator().next().getId1()+"\r\nMajor: "+beacons.iterator().next().getId2()+"\r\n Minor: "+beacons.iterator().next().getId3()+"\r\nDistance: "+beacons.iterator().next().getDistance());
                 }
                 else{
                     Log.i(TAG,"No beacons in this region.\r\n");
-                    text = "No beacons in this region.";
+                    logToDisplay("No beacons in this region.");
                 }
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        TextView txt = (TextView) findViewById(R.id.textView3);
-                        txt.setText(text);
-                    }
-                });
+
             }
         });
         try{
             beaconManager.startRangingBeaconsInRegion(new Region("Region X",null,null,null));
         }
         catch (Exception e){}
+    }
+
+    private void logToDisplay(final String line) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                TextView txt = (TextView) findViewById(R.id.textView3);
+                txt.setText("\n"+line);
+            }
+        });
     }
 }
