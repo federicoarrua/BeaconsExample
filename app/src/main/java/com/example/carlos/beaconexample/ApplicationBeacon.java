@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -14,7 +15,9 @@ import android.widget.Toast;
 import com.example.carlos.beaconexample.activity.DetectActivity;
 import com.example.carlos.beaconexample.activity.MainActivity;
 import com.example.carlos.beaconexample.activity.RangingActivity;
+import com.example.carlos.beaconexample.servertasks.DevicePostTask;
 import com.example.carlos.beaconexample.simbeacon.TimedBeaconSimulator;
+import com.example.carlos.beaconexample.utils.UserEmailFetcher;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
@@ -25,6 +28,7 @@ import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.R.attr.id;
@@ -38,6 +42,7 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
     private static final String TAG = " ApplicationBeacon";
     private static final int NOTIFICATION_ID = 123;
     private RegionBootstrap regionBootstrap;
+    private SharedPreferences prefs;
 
     public void onCreate() {
         super.onCreate();
@@ -53,6 +58,22 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
         // If you wish to test beacon detection in the Android Emulator, you can use code like this:
         BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
         ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
+
+        prefs = getSharedPreferences("con.example.carlos.beaconexample",MODE_PRIVATE);
+        if (prefs.getBoolean("firstrun", true)) {
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+            Log.d(TAG,"Firts Run");
+            prefs.edit().putBoolean("firstrun", false).commit();
+
+            HashMap<String,String> p = new HashMap<String,String>();
+            String device_id =UserEmailFetcher.getEmail(getApplicationContext());
+            p.put("device_id",device_id);
+            prefs.edit().putString("device_id",device_id);
+            Log.d(TAG,device_id);
+
+            new DevicePostTask().execute(p);
+        }
     }
 
     @Override

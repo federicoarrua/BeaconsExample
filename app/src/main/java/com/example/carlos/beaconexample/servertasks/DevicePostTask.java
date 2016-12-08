@@ -1,44 +1,36 @@
-package com.example.carlos.beaconexample.Tasks;
+package com.example.carlos.beaconexample.servertasks;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.example.carlos.beaconexample.classesBeacon.Beacon;
+import com.example.carlos.beaconexample.classesBeacon.Device;
 import com.google.gson.Gson;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+import java.util.HashMap;
 
 /**
- * Created by Carlos on 02/12/2016.
+ * Created by Carlos on 08/12/2016.
  */
 
-public class PostTask extends AsyncTask {
+public class DevicePostTask extends AsyncTask<HashMap<String,String>,Void,Object> {
     @Override
-    protected Object doInBackground(Object[] params) {
-        Beacon b = new Beacon();
-        b.setMajor_id("10");
-        b.setMinor_id("9");
+    protected Object doInBackground(HashMap<String,String>... params) {
+        HashMap<String,String> p = params[0];
 
-        Gson gson = new Gson();
-        String json = gson.toJson(b);
+        Device device = new Device();
+
+        device.setDevice_id(p.get("device_id"));
+
+        Gson g = new Gson();
+        String json = g.toJson(device);
 
         try {
-            HttpPost httpPost = new HttpPost("http://afternoon-coast-28639.herokuapp.com/beacons.json");
+            HttpPost httpPost = new HttpPost("http://afternoon-coast-28639.herokuapp.com/devices.json");
             httpPost.setEntity(new StringEntity(json));
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
@@ -50,6 +42,7 @@ public class PostTask extends AsyncTask {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
