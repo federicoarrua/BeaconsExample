@@ -6,22 +6,40 @@ package com.example.carlos.beaconexample.classesBeacon;
 
 public class Beacon {
 
-    private String major_id;
-    private String minor_id;
+    private Integer id;
+    private Integer major_id;
+    private Integer minor_id;
+    private String description;
 
-    public String getMajor_id() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getMajor_id() {
         return major_id;
     }
 
-    public void setMajor_id(String major_id) {
+    public void setMajor_id(Integer major_id) {
         this.major_id = major_id;
     }
 
-    public String getMinor_id() {
+    public Integer getMinor_id() {
         return minor_id;
     }
 
-    public void setMinor_id(String minor_id) {
+    public void setMinor_id(Integer minor_id) {
         this.minor_id = minor_id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -1,6 +1,8 @@
 package com.example.carlos.beaconexample.servertasks;
 
 import android.os.AsyncTask;
+
+import com.example.carlos.beaconexample.Constants;
 import com.example.carlos.beaconexample.classesBeacon.Device;
 import com.google.gson.Gson;
 
@@ -30,7 +32,7 @@ public class DevicePostTask extends AsyncTask<HashMap<String,String>,Void,Object
         String json = g.toJson(device);
 
         try {
-            HttpPost httpPost = new HttpPost("http://afternoon-coast-28639.herokuapp.com/devices.json");
+            HttpPost httpPost = new HttpPost(Constants.URL+"/devices.json");
             httpPost.setEntity(new StringEntity(json));
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");

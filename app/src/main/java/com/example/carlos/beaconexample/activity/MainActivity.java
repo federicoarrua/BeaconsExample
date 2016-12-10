@@ -8,16 +8,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.carlos.beaconexample.R;
-import com.example.carlos.beaconexample.servertasks.PostTask;
+import com.example.carlos.beaconexample.servertasks.BeaconByRegionGetTask;
+import com.example.carlos.beaconexample.servertasks.DiscoverPostTask;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,7 +52,15 @@ public class MainActivity extends AppCompatActivity {
     private void launchMonitorBeacon(View v){
 //        Intent i = new Intent(this,DetectActivity.class);
 //        startActivity(i);
-        new PostTask().execute();
+        HashMap<String,Integer> m = new  HashMap<String,Integer> ();
+        m.put("major_id",4660);
+        m.put("minor_id",64001);
+
+        try {
+            String p = new BeaconByRegionGetTask().execute(m).get().toString();
+        }
+        catch(Exception e){}
+
     }
 
     private void launchRangeBeacon(View v){

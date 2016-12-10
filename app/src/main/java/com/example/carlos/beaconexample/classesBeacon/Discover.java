@@ -5,26 +5,18 @@ package com.example.carlos.beaconexample.classesBeacon;
  */
 
 public class Discover {
-    private Integer device_id;
-    private Integer beacon_id;
+
+    private String device_id;
     private Integer major_id;
     private Integer minor_id;
     private String discover_time;
 
-    public Integer getDevice_id() {
+    public String getDevice_id() {
         return device_id;
     }
 
-    public void setDevice_id(Integer device_id) {
+    public void setDevice_id(String device_id) {
         this.device_id = device_id;
-    }
-
-    public Integer getBeacon_id() {
-        return beacon_id;
-    }
-
-    public void setBeacon_id(Integer beacon_id) {
-        this.beacon_id = beacon_id;
     }
 
     public Integer getMajor_id() {

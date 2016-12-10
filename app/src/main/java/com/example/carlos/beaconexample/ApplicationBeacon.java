@@ -15,7 +15,9 @@ import android.widget.Toast;
 import com.example.carlos.beaconexample.activity.DetectActivity;
 import com.example.carlos.beaconexample.activity.MainActivity;
 import com.example.carlos.beaconexample.activity.RangingActivity;
+import com.example.carlos.beaconexample.classesBeacon.Discover;
 import com.example.carlos.beaconexample.servertasks.DevicePostTask;
+import com.example.carlos.beaconexample.servertasks.DiscoverPostTask;
 import com.example.carlos.beaconexample.simbeacon.TimedBeaconSimulator;
 import com.example.carlos.beaconexample.utils.UserEmailFetcher;
 
@@ -69,7 +71,7 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
             HashMap<String,String> p = new HashMap<String,String>();
             String device_id =UserEmailFetcher.getEmail(getApplicationContext());
             p.put("device_id",device_id);
-            prefs.edit().putString("device_id",device_id);
+            prefs.edit().putString("device_id",device_id).commit();
             Log.d(TAG,device_id);
 
             new DevicePostTask().execute(p);
@@ -79,10 +81,16 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
     @Override
     public void didEnterRegion(Region region) {
         Log.d(TAG, "Got a didEnterRegion call");
+        HashMap<String,String> p = new  HashMap<String,String> ();
+        p.put("device_id",getSharedPreferences("con.example.carlos.beaconexample",MODE_PRIVATE).getString("device_id",null));
+        p.put("major_id","1");
+        p.put("minor_id","1");
+        p.put("beacon_id","1");
+        new DiscoverPostTask().execute(p);
         regionBootstrap.disable();
-        Intent i = new Intent(this, RangingActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(i);
+//        Intent i = new Intent(this, RangingActivity.class);
+//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        this.startActivity(i);
 //        showNotification("Beacon Notification","You enter a Beacon Region");
 //        Log.d(TAG,"NOTIFICACION "+region.toString());
     }
