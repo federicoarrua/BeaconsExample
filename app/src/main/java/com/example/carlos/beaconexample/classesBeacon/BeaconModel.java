@@ -1,10 +1,12 @@
 package com.example.carlos.beaconexample.classesBeacon;
 
+import java.io.Serializable;
+
 /**
  * Created by Carlos on 02/12/2016.
  */
 
-public class Beacon {
+public class BeaconModel implements Serializable {
 
     private Integer id;
     private Integer major_id;

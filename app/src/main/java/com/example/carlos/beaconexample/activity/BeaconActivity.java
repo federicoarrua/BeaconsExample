@@ -2,7 +2,6 @@ package com.example.carlos.beaconexample.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.widget.TextView;
 
 import com.example.carlos.beaconexample.Constants;
@@ -13,7 +12,6 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * Created by Carlos on 24/10/2016.

@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import com.example.carlos.beaconexample.Constants;
 import com.example.carlos.beaconexample.classesBeacon.Device;
-import com.google.gson.Gson;
+import com.example.carlos.beaconexample.utils.BeaconJsonUtils;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
@@ -28,8 +28,7 @@ public class DevicePostTask extends AsyncTask<HashMap<String,String>,Void,Object
 
         device.setDevice_id(p.get("device_id"));
 
-        Gson g = new Gson();
-        String json = g.toJson(device);
+        String json = BeaconJsonUtils.DeviceToJson(device);
 
         try {
             HttpPost httpPost = new HttpPost(Constants.URL+"/devices.json");

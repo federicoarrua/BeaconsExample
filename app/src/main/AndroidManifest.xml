@@ -22,10 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.DetectActivity"
-            android:launchMode="singleInstance">
-
-        </activity>
         <activity android:name=".activity.RangingActivity"
             android:launchMode="singleInstance">
 

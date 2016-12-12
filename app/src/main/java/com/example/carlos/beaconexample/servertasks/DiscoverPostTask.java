@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.example.carlos.beaconexample.Constants;
 import com.example.carlos.beaconexample.classesBeacon.Discover;
-import com.google.gson.Gson;
+import com.example.carlos.beaconexample.utils.BeaconJsonUtils;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
@@ -15,8 +15,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Carlos on 08/12/2016.
@@ -35,9 +33,7 @@ public class DiscoverPostTask extends AsyncTask<HashMap<String,String>,Void,Obje
         discover.setMajor_id(Integer.parseInt(p.get("major_id")));
         discover.setMinor_id(Integer.parseInt(p.get("minor_id")));
 
-
-        Gson g = new Gson();
-        String json = g.toJson(discover);
+        String json = BeaconJsonUtils.DiscoverToJson(discover);
 
         Log.d(TAG,json);
 

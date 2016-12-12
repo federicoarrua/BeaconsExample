@@ -4,8 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.carlos.beaconexample.Constants;
-import com.example.carlos.beaconexample.classesBeacon.Beacon;
-import com.example.carlos.beaconexample.utils.BeaconJsonUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Carlos on 10/12/2016.

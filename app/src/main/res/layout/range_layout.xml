@@ -7,7 +7,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView3"
-        android:textSize="14sp"
-        android:textAlignment="viewStart" />
+        android:textSize="24sp"
+        android:textAlignment="viewStart"
+        android:text="Descripción:" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewDesc" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewDist" />
 
 </LinearLayout>

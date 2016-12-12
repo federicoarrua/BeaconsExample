@@ -1,7 +1,5 @@
 package com.example.carlos.beaconexample.classesBeacon;
 
-import java.io.IOException;
-
 /**
  * Created by Carlos on 08/12/2016.
  */
