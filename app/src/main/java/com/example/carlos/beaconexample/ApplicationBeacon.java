@@ -1,6 +1,6 @@
 package com.example.carlos.beaconexample;
 
-import android.app.Activity;
+import android.Manifest;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -8,9 +8,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
-import com.example.carlos.beaconexample.activity.MainActivity;
 import com.example.carlos.beaconexample.activity.RangingActivity;
 import com.example.carlos.beaconexample.classesBeacon.BeaconModel;
 import com.example.carlos.beaconexample.servertasks.BeaconsGetTask;
@@ -32,7 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Carlos on 31/10/2016.
+ * Created by Federico on 31/10/2016.
+ * implementa BootstrapNotifier para monitorear beacons en background
  */
 
 public class ApplicationBeacon extends Application implements BootstrapNotifier {
@@ -42,26 +43,27 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
     public RegionBootstrap regionBootstrap;
     private SharedPreferences prefs;
 
+    @RequiresPermission(Manifest.permission.ACCOUNT_MANAGER)
     public void onCreate() {
         super.onCreate();
         BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);
 
         //For iBeacon uncomment this line
-        beaconManager.getBeaconParsers().add(new BeaconParser("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
         Log.d(TAG, "setting up background monitoring for beacons and power saving");
 
         prefs = getSharedPreferences("con.example.carlos.beaconexample",MODE_PRIVATE);
+
         if (prefs.getBoolean("firstrun", true)) {
-            // Do first run stuff here then set 'firstrun' as false
-            // using the following line to edit/commit prefs
+            // En la primer ejecución de la app registro el mail del dispositivo a la base de datos
             Log.d(TAG,"Firts Run");
-            prefs.edit().putBoolean("firstrun", false).commit();
 
             HashMap<String,String> p = new HashMap<String,String>();
             String device_id =UserEmailFetcher.getEmail(getApplicationContext());
             p.put("device_id",device_id);
-            prefs.edit().putString("device_id",device_id).commit();
-            Log.d(TAG,device_id);
+            Log.d(TAG, device_id);
+
+            prefs.edit().putString("device_id", device_id).commit();
+            prefs.edit().putBoolean("firstrun", false).commit();
 
             new DevicePostTask().execute(p);
 
@@ -69,17 +71,19 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
         try {
             String beaconsJson = (String) new BeaconsGetTask().execute().get();
             prefs.edit().putString("beacons",beaconsJson).commit();
-            //regionBootstrap = new RegionBootstrap(this,new Region("todos",null,null,null));
-            regionBootstrap = new RegionBootstrap(this,createRegions(beaconsJson));
 
-            //Simula Beacons
-            BeaconManager.setBeaconSimulator( new TimedBeaconSimulator());
-            ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
+            //Código para monitorear en background y lanzar notificaciones
+            //regionBootstrap = new RegionBootstrap(this,new Region("todos",null,null,null));
+            //regionBootstrap = new RegionBootstrap(this,createRegions(beaconsJson));
+
+            //Simula Beacons, comentar en etapa de producción
+//            BeaconManager.setBeaconSimulator( new TimedBeaconSimulator());
+//            ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
 
             Log.d(TAG,"Inititialization Completed!");
         }
         catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -88,14 +92,14 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
         Log.d(TAG, "Got a didEnterRegion call");
 
         BeaconModel b = new BeaconModel();
-        b.setMajor_id(region.getId2().toInt());
-        b.setMinor_id(region.getId3().toInt());
+        b.setMajor_region_id(region.getId2().toInt());
+        b.setMinor_region_id(region.getId3().toInt());
         b.setDescription(region.getUniqueId());
 
-        HashMap<String,String> ids = new HashMap<String,String>();
+        HashMap<String,String> ids = new HashMap<>();
         ids.put("device_id",prefs.getString("device_id",null));
-        ids.put("major_id",b.getMajor_id().toString());
-        ids.put("minor_id",b.getMinor_id().toString());
+        ids.put("major_region_id",b.getMajor_region_id().toString());
+        ids.put("minor_region_id",b.getMinor_region_id().toString());
         new DiscoverPostTask().execute(ids);
 
         showNotification("Beacon Notification","You enter a Beacon Region",b);
@@ -136,11 +140,11 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
     //Obtain region list from rails server with GET method
     public List<Region> createRegions(String json){
         BeaconModel[] beaconArray = BeaconJsonUtils.JsonToBeaconArray(json);
-        List<Region> regionList = new ArrayList<Region>();
+        List<Region> regionList = new ArrayList<>();
 
         for(int i=0;i<beaconArray.length;i++) {
             Region region = new Region(beaconArray[i].getId().toString(),
-                    null, Identifier.parse(beaconArray[i].getMajor_id().toString()), Identifier.parse(beaconArray[i].getMinor_id().toString()));
+                    null, Identifier.parse(beaconArray[i].getMajor_region_id().toString()), Identifier.parse(beaconArray[i].getMinor_region_id().toString()));
             regionList.add(region);
         }
         return regionList;

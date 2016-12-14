@@ -16,7 +16,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 /**
- * Created by Carlos on 08/12/2016.
+ * Created by Federico on 10/11/2016.
+ * AsyncTask que recibe el mail del celular anfitrión y hace un POST a la API de BeaconTaller con
+ * el email como cuerpo del request.
+ * POST /devices.json
  */
 
 public class DevicePostTask extends AsyncTask<HashMap<String,String>,Void,Object> {

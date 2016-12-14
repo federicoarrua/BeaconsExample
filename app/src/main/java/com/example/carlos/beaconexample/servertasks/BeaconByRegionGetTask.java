@@ -15,7 +15,11 @@ import java.net.URL;
 import java.util.HashMap;
 
 /**
- * Created by Carlos on 10/12/2016.
+ * Created by Federico on 10/12/2016.
+ * AsyncTask que recibe los parametros de major_region_id y minor_region_id y hace un GET a la API
+ * BeaconTaller.
+ * GET /beacons/showregion.json?major_region_id=?&minor_region_id=?
+ * return json de la respuesta o null en caso de que no haya respuesta.
  */
 
 public class BeaconByRegionGetTask extends AsyncTask<HashMap<String,Integer>,Void,Object> {
@@ -27,7 +31,7 @@ public class BeaconByRegionGetTask extends AsyncTask<HashMap<String,Integer>,Voi
         BufferedReader reader = null;
 
         try {
-            URL url = new URL(Constants.URL+"/beacons/showregion.json?major_id="+regions.get("major_id")+"&minor_id="+regions.get("minor_id"));
+            URL url = new URL(Constants.URL+"/beacons/showregion.json?major_region_id="+regions.get("major_region_id")+"&minor_region_id="+regions.get("minor_region_id"));
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
 

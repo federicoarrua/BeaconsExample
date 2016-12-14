@@ -1,7 +1,8 @@
 package com.example.carlos.beaconexample.classesBeacon;
 
 /**
- * Created by Carlos on 08/12/2016.
+ * Created by Federico on 08/12/2016.
+ * BeaconModel Implementa los campos que se reciben en el json de la API BeaconTaller
  */
 
 public class Discover {

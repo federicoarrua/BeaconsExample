@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Carlos on 08/12/2016.
+ * Created by Federico on 08/12/2016.
+ * Utilidades para transformar clases del paquete classesBeacon a json y viceversa
  */
 
 public class BeaconJsonUtils {
@@ -22,9 +23,7 @@ public class BeaconJsonUtils {
      */
     public static BeaconModel[] JsonToBeaconArray(String json){
         Gson g = new Gson();
-        BeaconModel[] b = g.fromJson(json,BeaconModel[].class);
-
-        return b;
+        return g.fromJson(json,BeaconModel[].class);
     }
 
     /*
@@ -33,28 +32,21 @@ public class BeaconJsonUtils {
     public static List<BeaconModel> JsonToBeaconList(String json){
         Gson gson = new Gson();
         Type beaconListType = new TypeToken<ArrayList<BeaconModel>>(){}.getType();
-        List<BeaconModel> b = gson.fromJson(json, beaconListType);
-
-        return b;
+        return gson.fromJson(json, beaconListType);
     }
 
     public static BeaconModel JsonToBeacon(String json){
         Gson gson = new Gson();
-        BeaconModel b = gson.fromJson(json,BeaconModel.class);
-        return b;
+        return gson.fromJson(json,BeaconModel.class);
     }
 
     public static String DiscoverToJson(Discover d){
         Gson g = new Gson();
-        String json = g.toJson(d);
-
-        return json;
+        return g.toJson(d);
     }
 
     public static String DeviceToJson(Device d){
         Gson g = new Gson();
-        String json = g.toJson(d);
-
-        return json;
+        return g.toJson(d);
     }
 }

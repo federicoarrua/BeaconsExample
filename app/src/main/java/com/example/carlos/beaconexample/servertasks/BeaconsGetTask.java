@@ -19,7 +19,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by Carlos on 08/12/2016.
+ * Created by Federico on 10/11/2016.
+ * AsyncTask que hace un GET a la API BeaconTaller para recibir la lista de todos los beacons en
+ * formato json
+ * GET /beacons.json
+ * return json con todos los beacons de la base de datos
  */
 
 public class BeaconsGetTask extends AsyncTask{

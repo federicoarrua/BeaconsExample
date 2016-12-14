@@ -17,7 +17,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 /**
- * Created by Carlos on 08/12/2016.
+ * Created by Federico on 10/11/2016.
+ * AsyncTask que recibe el mail los datos del beacon que descubrió y hace un POST a la API de Beacon
+ * Taller con los datos como cuerpo del request.
+ * POST /discovers.json
  */
 
 public class DiscoverPostTask extends AsyncTask<HashMap<String,String>,Void,Object>{
@@ -30,8 +33,8 @@ public class DiscoverPostTask extends AsyncTask<HashMap<String,String>,Void,Obje
 
         Discover discover = new Discover();
         discover.setDevice_id(p.get("device_id"));
-        discover.setMajor_id(Integer.parseInt(p.get("major_id")));
-        discover.setMinor_id(Integer.parseInt(p.get("minor_id")));
+        discover.setMajor_id(Integer.parseInt(p.get("major_region_id")));
+        discover.setMinor_id(Integer.parseInt(p.get("minor_region_id")));
 
         String json = BeaconJsonUtils.DiscoverToJson(discover);
 
