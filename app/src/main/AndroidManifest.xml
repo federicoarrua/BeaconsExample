@@ -29,6 +29,9 @@
         <activity android:name=".activity.BeaconActivity">
 
         </activity>
+        <activity android:name=".activity.ListRangeActivity">
+
+        </activity>
     </application>
 
 </manifest>

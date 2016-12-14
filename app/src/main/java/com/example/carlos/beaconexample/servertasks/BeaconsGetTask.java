@@ -1,9 +1,15 @@
 package com.example.carlos.beaconexample.servertasks;
 
+import android.app.Activity;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.carlos.beaconexample.Constants;
+import com.example.carlos.beaconexample.activity.MainActivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

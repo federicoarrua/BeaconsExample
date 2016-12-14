@@ -31,8 +31,28 @@
 
     <Button
         android:text="Beacon Mode"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBeacon"
-        android:layout_weight="1" />
+        android:layout_width="240dp" />
+
+    <Button
+        android:text="Lista de Beacons cercanos"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonList" />
+
+    <Button
+        android:text="Sincronizar Beacons"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonSync"
+        android:layout_weight="7.41" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_weight="7.41" />
+
 </LinearLayout>
