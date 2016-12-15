@@ -101,7 +101,8 @@ public class RangingActivity extends Activity implements BeaconConsumer {
 
     @Override
     /*
-       onBeaconServiceConnect() añade un rangeNotifier para la región de la variable beacon y monitorea en las
+       onBeaconServiceConnect() encargado de iniciar lectura de beacons
+       añade un rangeNotifier para la región de la variable beacon y monitorea en las
        regiones de la base de datos para publicar descubrimientos
      */
     public void onBeaconServiceConnect() {

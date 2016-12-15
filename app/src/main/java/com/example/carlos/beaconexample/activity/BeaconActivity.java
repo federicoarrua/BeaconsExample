@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 /**
  * Created by Federico on 24/10/2016.
+ * Instancia el modo beacon, e inicia transmisión
  */
 
 public class BeaconActivity extends Activity {

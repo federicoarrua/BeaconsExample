@@ -76,10 +76,10 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
             //regionBootstrap = new RegionBootstrap(this,new Region("todos",null,null,null));
             //regionBootstrap = new RegionBootstrap(this,createRegions(beaconsJson));
 
-            //Simula Beacons, comentar en etapa de producción
-//            BeaconManager.setBeaconSimulator( new TimedBeaconSimulator());
-//            ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
-
+            /*Simula Beacons, comentar en etapa de producción
+            BeaconManager.setBeaconSimulator( new TimedBeaconSimulator());
+            ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
+            */
             Log.d(TAG,"Inititialization Completed!");
         }
         catch(Exception e){
