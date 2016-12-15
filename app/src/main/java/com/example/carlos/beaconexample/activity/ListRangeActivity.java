@@ -94,7 +94,9 @@ public class ListRangeActivity extends ListActivity implements BeaconConsumer {
 
         //Inicialización beaconManager
         this.beaconManager = BeaconManager.getInstanceForApplication(this);
-
+        this.beaconManager.setForegroundScanPeriod(1900l);
+        this.beaconManager.setForegroundBetweenScanPeriod(0l);
+        
         //Descomentar si el regionBootstrap esta inicializado en la aplicación
         //((ApplicationBeacon)this.getApplication()).stopBeaconMonitoring();
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
