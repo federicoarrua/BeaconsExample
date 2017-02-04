@@ -126,38 +126,8 @@ public class ListRangeActivity extends ListActivity implements BeaconConsumer {
                 }
             }
         });
-        beaconManager.addMonitorNotifier(new MonitorNotifier() {
-            @Override
-            public void didEnterRegion(Region region) {
-                Log.d(TAG, "Got a didEnterRegion call");
-
-                BeaconModel b = new BeaconModel();
-                b.setMajor_region_id(region.getId2().toInt());
-                b.setMinor_region_id(region.getId3().toInt());
-                b.setDescription(region.getUniqueId());
-
-                HashMap<String,String> ids = new HashMap<>();
-                ids.put("device_id",prefs.getString("device_id",null));
-                ids.put("major_region_id",b.getMajor_region_id().toString());
-                ids.put("minor_region_id",b.getMinor_region_id().toString());
-                new DiscoverPostTask().execute(ids);
-
-                Log.d(TAG,"NOTIFICACION "+region.toString());
-            }
-
-            @Override
-            public void didExitRegion(Region region) {
-
-            }
-
-            @Override
-            public void didDetermineStateForRegion(int i, Region region) {
-
-            }
-        });
         try{
             beaconManager.startRangingBeaconsInRegion(new Region("Ranging region",null, null,null));
-            startMonitorRegions();
         }
         catch (Exception e){
             e.printStackTrace();

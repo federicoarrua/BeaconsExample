@@ -3,8 +3,12 @@ package com.example.carlos.beaconexample.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,12 +34,16 @@ import org.altbeacon.beacon.Region;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity implements BeaconConsumer {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MAIN_ACTIVITY";
     private SharedPreferences prefs;
     private BeaconModel[] beaconModelArray;
     private BeaconManager beaconManager;
+
+    private final int MY_PERMISSIONS_REQUEST = 1;
+    private final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 2;
+    private final int MY_PERMISSIONS_READ_CONTACTS = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +83,28 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
         //Inicialización Beacon Monitor
         this.beaconManager = BeaconManager.getInstanceForApplication(this);
-        //Descomentar si el regionBootstrap esta inicializado en la aplicación
-        //((ApplicationBeacon)this.getApplication()).stopBeaconMonitoring();
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        this.beaconManager.bind(this);
+        startMonitorRegions();
     }
 
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.GET_ACCOUNTS)!= PackageManager.PERMISSION_GRANTED  && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.GET_ACCOUNTS,Manifest.permission.ACCESS_COARSE_LOCATION},MY_PERMISSIONS_REQUEST);
+        else{
+            if (ContextCompat.checkSelfPermission(this,Manifest.permission.GET_ACCOUNTS)!= PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.GET_ACCOUNTS},MY_PERMISSIONS_READ_CONTACTS);
+            }
+            else{
+                if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+                }
+            }
+        }
+
+    }
 
     /*
         launchBeacon Método del botón modo beacon
@@ -133,46 +157,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        beaconManager.unbind(this);
-    }
-
-    @Override
-    /*
-       onBeaconServiceConnect() encargado de iniciar lectura de beacons
-       añade un MonitorNotifier que monitorea en las
-       regiones de la base de datos para publicar descubrimientos
-     */
-    public void onBeaconServiceConnect() {
-        this.beaconManager.addMonitorNotifier(new MonitorNotifier() {
-            @Override
-            public void didEnterRegion(Region region) {
-                Log.d(TAG, "Entré a la región");
-
-                BeaconModel b = new BeaconModel();
-                b.setMajor_region_id(region.getId2().toInt());
-                b.setMinor_region_id(region.getId3().toInt());
-                b.setDescription(region.getUniqueId());
-
-                HashMap<String,String> ids = new HashMap<>();
-                ids.put("device_id",prefs.getString("device_id",null));
-                ids.put("major_region_id",b.getMajor_region_id().toString());
-                ids.put("minor_region_id",b.getMinor_region_id().toString());
-                new DiscoverPostTask().execute(ids);
-
-                Log.d(TAG,"NOTIFICACION "+region.toString());
-            }
-
-            @Override
-            public void didExitRegion(Region region) {
-                Log.d(TAG, "Salí de la región");
-            }
-
-            @Override
-            public void didDetermineStateForRegion(int i, Region region) {
-
-            }
-        });
-        startMonitorRegions();
     }
 
     /*

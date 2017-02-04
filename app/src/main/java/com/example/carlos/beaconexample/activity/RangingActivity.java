@@ -120,38 +120,8 @@ public class RangingActivity extends Activity implements BeaconConsumer {
 
             }
         });
-        beaconManager.addMonitorNotifier(new MonitorNotifier() {
-            @Override
-            public void didEnterRegion(Region region) {
-                Log.d(TAG, "Got a didEnterRegion call");
-
-                BeaconModel b = new BeaconModel();
-                b.setMajor_region_id(region.getId2().toInt());
-                b.setMinor_region_id(region.getId3().toInt());
-                b.setDescription(region.getUniqueId());
-
-                HashMap<String,String> ids = new HashMap<>();
-                ids.put("device_id",prefs.getString("device_id",null));
-                ids.put("major_region_id",b.getMajor_region_id().toString());
-                ids.put("minor_region_id",b.getMinor_region_id().toString());
-                new DiscoverPostTask().execute(ids);
-
-                Log.d(TAG,"NOTIFICACION "+region.toString());
-            }
-
-            @Override
-            public void didExitRegion(Region region) {
-
-            }
-
-            @Override
-            public void didDetermineStateForRegion(int i, Region region) {
-
-            }
-        });
         try{
             beaconManager.startRangingBeaconsInRegion(new Region(beacon.getDescription(),null, Identifier.parse(beacon.getMajor_region_id().toString()),Identifier.parse(beacon.getMinor_region_id().toString())));
-            startMonitorRegions();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -180,20 +150,5 @@ public class RangingActivity extends Activity implements BeaconConsumer {
                 distance.setText("Saliste de la región del beacon.");
             }
         });
-    }
-
-    /*
-        startMonitorRegions Método privado para iniciar regiones de monitoreo
-     */
-    private void startMonitorRegions(){
-        for(int i=0;i<beaconModelArray.length;i++) {
-            Region region = new Region(beaconModelArray[i].getName(),null, Identifier.parse(beaconModelArray[i].getMajor_region_id().toString()), Identifier.parse(beaconModelArray[i].getMinor_region_id().toString()));
-            try {
-                beaconManager.startMonitoringBeaconsInRegion(region);
-            }
-            catch(RemoteException re){
-                re.printStackTrace();
-            }
-        }
     }
 }

@@ -47,39 +47,46 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
     public void onCreate() {
         super.onCreate();
         BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);
+        beaconManager.setBackgroundScanPeriod(1000l);
+        beaconManager.setBackgroundBetweenScanPeriod(0l);
+        beaconManager.setRegionExitPeriod(2000l);
 
         //For iBeacon uncomment this line
         Log.d(TAG, "setting up background monitoring for beacons and power saving");
 
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
         prefs = getSharedPreferences("con.example.carlos.beaconexample",MODE_PRIVATE);
 
         if (prefs.getBoolean("firstrun", true)) {
             // En la primer ejecución de la app registro el mail del dispositivo a la base de datos
             Log.d(TAG,"Firts Run");
+            prefs.edit().putBoolean("firstrun",false);
 
             HashMap<String,String> p = new HashMap<String,String>();
             String device_id =UserEmailFetcher.getEmail(getApplicationContext());
+            //String device_id ="example";
             p.put("device_id",device_id);
-            Log.d(TAG, device_id);
 
             prefs.edit().putString("device_id", device_id).commit();
             prefs.edit().putBoolean("firstrun", false).commit();
 
             new DevicePostTask().execute(p);
 
+            try {
+                String beaconsJson = (String) new BeaconsGetTask().execute().get();
+                prefs.edit().putString("beacons", beaconsJson).commit();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
         try {
             String beaconsJson = (String) new BeaconsGetTask().execute().get();
             prefs.edit().putString("beacons",beaconsJson).commit();
 
             //Código para monitorear en background y lanzar notificaciones
-            //regionBootstrap = new RegionBootstrap(this,new Region("todos",null,null,null));
-            //regionBootstrap = new RegionBootstrap(this,createRegions(beaconsJson));
+            regionBootstrap = new RegionBootstrap(this,createRegions(beaconsJson));
 
-            /*Simula Beacons, comentar en etapa de producción
-            BeaconManager.setBeaconSimulator( new TimedBeaconSimulator());
-            ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
-            */
             Log.d(TAG,"Inititialization Completed!");
         }
         catch(Exception e){
@@ -87,11 +94,11 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
         }
     }
 
-    @Override
     public void didEnterRegion(Region region) {
-        Log.d(TAG, "Got a didEnterRegion call");
+        Log.d(TAG, "Got a didEnterRegion call: ");
 
         BeaconModel b = new BeaconModel();
+        b.setName(region.getUniqueId());
         b.setMajor_region_id(region.getId2().toInt());
         b.setMinor_region_id(region.getId3().toInt());
         b.setDescription(region.getUniqueId());
@@ -102,15 +109,28 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
         ids.put("minor_region_id",b.getMinor_region_id().toString());
         new DiscoverPostTask().execute(ids);
 
-        showNotification("Beacon Notification","You enter a Beacon Region",b);
+        showNotification("Beacon Notification","Estas cerca de \""+b.getName()+"\"",b);
         Log.d(TAG,"NOTIFICACION "+region.toString());
 
+        //Si no se quiere enviar mas notificaciones despues de la primer descomentar la siguiente linea
         //regionBootstrap.disable();
     }
 
     @Override
     public void didExitRegion(Region region) {
+        Log.d(TAG, "Got a didExitRegion call");
 
+        BeaconModel b = new BeaconModel();
+        b.setName(region.getUniqueId());
+        b.setMajor_region_id(region.getId2().toInt());
+        b.setMinor_region_id(region.getId3().toInt());
+        b.setDescription(region.getUniqueId());
+
+        showNotification("Beacon Notification","Te alejaste de \""+b.getName()+"\"",b);
+        Log.d(TAG,"NOTIFICACION "+region.toString());
+
+        //Si no se quiere enviar mas notificaciones despues de la primer descomentar la siguiente linea
+        //regionBootstrap.disable();
     }
 
     @Override
@@ -148,16 +168,5 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
             regionList.add(region);
         }
         return regionList;
-    }
-
-    public void startBeaconMonitoring() {
-        if (regionBootstrap == null) {
-            Region region = new Region("backgroundRegion", null, null, null);
-            regionBootstrap = new RegionBootstrap(this, region);
-        }
-    }
-
-    public void stopBeaconMonitoring() {
-        regionBootstrap.disable();
     }
 }
