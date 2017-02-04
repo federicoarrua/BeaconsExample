@@ -22,6 +22,8 @@ import java.util.Arrays;
 public class BeaconActivity extends Activity {
 
     private String TAG = "Beacon Activity";
+    private BeaconTransmitter bt;
+    private Beacon beacon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class BeaconActivity extends Activity {
         //((ApplicationBeacon)this.getApplication()).stopBeaconMonitoring();
 
         try {
-            Beacon beacon = new Beacon.Builder().setId1(Constants.UUID_DEV)
+            beacon = new Beacon.Builder().setId1(Constants.UUID_DEV)
                     .setId2("1")
                     .setId3("2")
                     .setManufacturer(0x004C)
@@ -42,8 +44,10 @@ public class BeaconActivity extends Activity {
                     .setDataFields(Arrays.asList(new Long[] {0l}))
                     .build();
             BeaconParser bp = new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24");
-            BeaconTransmitter bt = new BeaconTransmitter(getApplicationContext(),bp);
+
+            bt = new BeaconTransmitter(getApplicationContext(),bp);
             bt.startAdvertising(beacon);
+
             Log.d(TAG,"Transmitiendo como beacon");
             text.setText("Beacon mode funcionando");
         }
@@ -52,5 +56,11 @@ public class BeaconActivity extends Activity {
             text.setText("Beacon mode no funciona. \r\n Chequear Bluetooth.");
             Log.d(TAG,"Error al encender la transmisión como beacon.");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bt.startAdvertising(beacon);
     }
 }
