@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -129,8 +130,38 @@ public class ListRangeActivity extends ListActivity implements BeaconConsumer {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        beaconManager.bind(this);
+        try {
+            beaconManager.startRangingBeaconsInRegion(new Region("Ranging region", null, null, null));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        try {
+            beaconManager.stopRangingBeaconsInRegion(new Region(("Ranging region"), null, null, null));
+        }
+        catch(RemoteException re){
+            re.printStackTrace();
+        }
+        beaconManager.unbind(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            beaconManager.stopRangingBeaconsInRegion(new Region(("Ranging region"), null, null, null));
+        }
+        catch(RemoteException re){
+            re.printStackTrace();
+        }
         beaconManager.unbind(this);
     }
 

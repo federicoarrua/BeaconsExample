@@ -22,6 +22,7 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -95,6 +96,12 @@ public class RangingActivity extends Activity implements BeaconConsumer {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        try {
+            beaconManager.stopRangingBeaconsInRegion(new Region(beacon.getDescription(),null, Identifier.parse(beacon.getMajor_region_id().toString()),Identifier.parse(beacon.getMinor_region_id().toString())));
+        }
+        catch(RemoteException re){
+            re.printStackTrace();
+        }
         beaconManager.unbind(this);
     }
 
@@ -109,10 +116,18 @@ public class RangingActivity extends Activity implements BeaconConsumer {
 
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                boolean found = false;
                 if (beacons.size()>0){
-                    logToDisplay(Float.toString((float)beacons.iterator().next().getDistance()));
+                    for (Beacon b: beacons) {
+                        if(b.getId2().toInt() == beacon.getMajor_region_id() && b.getId3().toInt() == beacon.getMinor_region_id()) {
+                            DecimalFormat df = new DecimalFormat("0.00");
+                            logToDisplay(df.format(beacons.iterator().next().getDistance()));
+                            found = true;
+                            break;
+                        }
+                    }
                 }
-                else{
+                if(found == false){
                     Log.i(TAG,"No beacons in this region.\r\n");
                     logToDisplayNoBeacon();
                 }
@@ -146,7 +161,7 @@ public class RangingActivity extends Activity implements BeaconConsumer {
         runOnUiThread(new Runnable() {
             public void run() {
                 TextView distance = (TextView) findViewById(R.id.textViewDist);
-                distance.setText("Saliste de la región del beacon.");
+                distance.setText("No estás dentro de la región del beacon.");
             }
         });
     }

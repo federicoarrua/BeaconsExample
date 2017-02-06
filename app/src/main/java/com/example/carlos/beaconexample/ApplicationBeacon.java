@@ -173,7 +173,7 @@ public class ApplicationBeacon extends Application implements BootstrapNotifier 
         List<Region> regionList = new ArrayList<>();
 
         for(int i=0;i<beaconArray.length;i++) {
-            Region region = new Region(beaconArray[i].getId().toString(),
+            Region region = new Region(beaconArray[i].getName(),
                     null, Identifier.parse(beaconArray[i].getMajor_region_id().toString()), Identifier.parse(beaconArray[i].getMinor_region_id().toString()));
             regionList.add(region);
         }
