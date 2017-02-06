@@ -32,9 +32,7 @@ public class BeaconActivity extends Activity {
 
         TextView text = (TextView) findViewById(R.id.textView2);
 
-        //Descomentar si el regionBootstrap esta inicializado en la aplicación
-        //((ApplicationBeacon)this.getApplication()).stopBeaconMonitoring();
-
+        //Trato de transmitir como beacon con esas especificaciones
         try {
             beacon = new Beacon.Builder().setId1(Constants.UUID_DEV)
                     .setId2("1")
@@ -51,9 +49,10 @@ public class BeaconActivity extends Activity {
             Log.d(TAG,"Transmitiendo como beacon");
             text.setText("Beacon mode funcionando");
         }
+        //En caso de no poder muestro en pantalla que no es posible
         catch(Exception e){
             e.printStackTrace();
-            text.setText("Beacon mode no funciona. \r\n Chequear Bluetooth.");
+            text.setText("Beacon mode no funciona. \r\n Chequear Bluetooth o versión de Android.");
             Log.d(TAG,"Error al encender la transmisión como beacon.");
         }
     }
@@ -61,6 +60,8 @@ public class BeaconActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        bt.startAdvertising(beacon);
+
+        //Al salir de este activity dejo de transmitir como beacon
+        bt.stopAdvertising();
     }
 }

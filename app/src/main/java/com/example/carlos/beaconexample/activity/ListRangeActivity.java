@@ -4,35 +4,31 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.carlos.beaconexample.ApplicationBeacon;
 import com.example.carlos.beaconexample.R;
 import com.example.carlos.beaconexample.classesBeacon.BeaconModel;
-import com.example.carlos.beaconexample.servertasks.DiscoverPostTask;
 import com.example.carlos.beaconexample.utils.BeaconJsonUtils;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.Identifier;
-import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**
  * Created by Federico on 13/12/2016.
+ * ListRangeActivity visualiza todos los beacons dentro del rango de cobertura Bluetooth y los
+ * visualiza en una lista.
  */
 
 public class ListRangeActivity extends ListActivity implements BeaconConsumer {
@@ -96,9 +92,7 @@ public class ListRangeActivity extends ListActivity implements BeaconConsumer {
         this.beaconManager = BeaconManager.getInstanceForApplication(this);
         this.beaconManager.setForegroundScanPeriod(1900l);
         this.beaconManager.setForegroundBetweenScanPeriod(0l);
-        
-        //Descomentar si el regionBootstrap esta inicializado en la aplicación
-        //((ApplicationBeacon)this.getApplication()).stopBeaconMonitoring();
+
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
 
         beaconManager.bind(this);
@@ -180,18 +174,4 @@ public class ListRangeActivity extends ListActivity implements BeaconConsumer {
         return "El beacon no está en la base de datos";
     }
 
-    /*
-        startMonitorRegions Método privado para iniciar regiones de monitoreo
-     */
-    private void startMonitorRegions(){
-        for(int i=0;i<beaconModelArray.length;i++) {
-            Region region = new Region(beaconModelArray[i].getName(),null, Identifier.parse(beaconModelArray[i].getMajor_region_id().toString()), Identifier.parse(beaconModelArray[i].getMinor_region_id().toString()));
-            try {
-                beaconManager.startMonitoringBeaconsInRegion(region);
-            }
-            catch(RemoteException re){
-                re.printStackTrace();
-            }
-        }
-    }
 }

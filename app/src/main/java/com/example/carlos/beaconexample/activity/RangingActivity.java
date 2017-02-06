@@ -28,6 +28,8 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Federico on 24/10/2016.
+ * RangingActivity visualiza un beacon con los detalles del mismo que están en la base de datos y
+ * la distancia si es que sigue dentro del rango.
  */
 
 public class RangingActivity extends Activity implements BeaconConsumer {
@@ -53,9 +55,6 @@ public class RangingActivity extends Activity implements BeaconConsumer {
 
         //Recibo el beacon a visualizar desde la vista anterior
         beacon = (BeaconModel) getIntent().getSerializableExtra("beacon");
-
-        //Descomentar si el regionBootstrap esta inicializado en la aplicación
-        //((ApplicationBeacon)this.getApplication()).stopBeaconMonitoring();
 
         //Obtengo lista de beacons en base de datos
         prefs = getSharedPreferences("con.example.carlos.beaconexample",MODE_PRIVATE);

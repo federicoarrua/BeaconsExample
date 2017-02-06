@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,22 +16,21 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.carlos.beaconexample.ApplicationBeacon;
 import com.example.carlos.beaconexample.R;
 import com.example.carlos.beaconexample.classesBeacon.BeaconModel;
 import com.example.carlos.beaconexample.servertasks.BeaconsGetTask;
-import com.example.carlos.beaconexample.servertasks.DiscoverPostTask;
 import com.example.carlos.beaconexample.utils.BeaconJsonUtils;
 
-import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
-import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
+/**
+ * Created by Federico on 13/12/2016.
+ * MainActivity vista principal de la aplicación contiene los botones que dirigen a la funcionalidad
+ * de la aplicación.
+ */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,10 +85,11 @@ public class MainActivity extends AppCompatActivity {
         startMonitorRegions();
     }
 
-
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onStart();
+
+        //Chequeo de permisos requeridos por la app en AndroidManifest.xml
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.GET_ACCOUNTS)!= PackageManager.PERMISSION_GRANTED  && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.GET_ACCOUNTS,Manifest.permission.ACCESS_COARSE_LOCATION},MY_PERMISSIONS_REQUEST);
         else{
@@ -151,12 +150,6 @@ public class MainActivity extends AppCompatActivity {
                 pg.setVisibility(View.INVISIBLE);
             }
         });
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     /*
